@@ -1,0 +1,12 @@
+#! /usr/bin/env bash
+
+KITTY_CONF="$HOME/.config/kitty/kitty.conf"
+
+printf "${TEXT_CYAN}➡ Updating Kitty configuration...${TEXT_RST}\n"
+
+if grep -q "^background_opacity" $KITTY_CONF; then
+    sed -i 's/^background_opacity.*/background_opacity 0.95/' $KITTY_CONF
+else
+    echo "background_opacity 0.95" >> $KITTY_CONF
+fi
+printf "${TEXT_GREEN}✓ Kitty configuration updated${TEXT_RST}\n"

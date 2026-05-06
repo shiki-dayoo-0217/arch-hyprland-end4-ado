@@ -1,0 +1,11 @@
+#! /usr/bin/env bash
+
+printf "${TEXT_CYAN}➡ Setting up cursor theme...${TEXT_RST}\n"
+
+sed -i '/hyprctl setcursor/d' "$HOME/.config/hypr/hyprland/execs.conf"
+sudo cp -r "./assets/cursor-sets/Ado-Cursor" "/usr/share/icons"
+
+gsettings set org.gnome.desktop.interface cursor-theme 'Ado-Cursor'
+gsettings set org.gnome.desktop.interface cursor-size 24
+
+printf "${TEXT_GREEN}✓ Cursor theme setup complete${TEXT_RST}\n"

@@ -1,0 +1,16 @@
+#! /usr/bin/env bash
+
+TEXT_RED='\e[31m'
+TEXT_GREEN='\e[32m'
+TEXT_YELLOW='\e[33m'
+TEXT_BLUE='\e[34m'
+TEXT_PURPLE='\e[35m'
+TEXT_CYAN='\e[36m'
+
+TEXT_BOLD='\e[1m'
+TEXT_FAINT='\e[2m'
+TEXT_SLANT='\e[3m'
+TEXT_UNDERLINE='\e[4m'
+TEXT_BLINK='\e[5m'
+TEXT_INVERT='\e[7m'
+TEXT_RST='\e[00m'

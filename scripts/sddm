@@ -1,0 +1,90 @@
+#! /usr/bin/env bash
+
+WALLPAPERS_DIR="$HOME/Pictures/Wallpapers"
+SDDM_SC_DIR="/usr/share/sddm/themes/Sugar-Candy"
+SDDM_CONF_DIR="/etc/sddm.conf.d"
+
+if command -v paru >/dev/null 2>&1; then
+  AUR_HELPER="paru"
+  printf "${TEXT_GREEN}✓ Found paru${TEXT_RST}\n"
+elif command -v yay >/dev/null 2>&1; then
+  AUR_HELPER="yay"
+  printf "${TEXT_GREEN}✓ Found yay${TEXT_RST}\n"
+elif command -v pikaur >/dev/null 2>&1; then
+  AUR_HELPER="pikaur"
+  printf "${TEXT_GREEN}✓ Found pikaur${TEXT_RST}\n"
+else
+  printf "${TEXT_RED}${TEXT_BOLD}❌ No AUR helper found! Install paru/yay/pikaur first!${TEXT_RST}\n"
+  exit 1
+fi
+
+printf "${TEXT_CYAN}➡ Installing SDDM and theme...${TEXT_RST}\n"
+
+sudo pacman -Sy --noconfirm --needed sddm
+$AUR_HELPER -Sy --noconfirm --needed sddm-theme-sugar-candy
+
+sudo mkdir -p "$SDDM_CONF_DIR"
+
+if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+    DISPLAY_SERVER="wayland"
+elif [ "$XDG_SESSION_TYPE" = "x11" ]; then
+    DISPLAY_SERVER="X11"
+else
+    DISPLAY_SERVER="X11"
+fi
+
+printf "${TEXT_CYAN}➡ Generating SDDM configuration...${TEXT_RST}\n"
+
+rm -rf "./configs/sddm.conf"
+
+cat > "./configs/sddm.conf" <<EOF
+[General]
+DisplayServer=$DISPLAY_SERVER
+Numlock=on
+
+[Theme]
+Current=Sugar-Candy
+CursorTheme=Ado-Cursor
+
+EOF
+
+if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+    printf "${TEXT_CYAN}➡ Adding Wayland block...${TEXT_RST}\n"
+    cat >> "./configs/sddm.conf" <<EOF
+[Wayland]
+CompositorCommand=/usr/bin/kwin_wayland --no-lockscreen
+SessionDir=/usr/share/wayland-sessions
+EnableHiDPI=true
+EOF
+fi
+
+if [ "$XDG_SESSION_TYPE" = "x11" ]; then
+    printf "${TEXT_CYAN}➡ Adding X11 block...${TEXT_RST}\n"
+    cat >> "./configs/sddm.conf" <<EOF
+[X11]
+ServerPath=/usr/bin/X
+SessionDir=/usr/share/xsessions
+DisplayCommand=/usr/share/sddm/scripts/Xsetup
+EOF
+fi
+
+printf "${TEXT_GREEN}✓ SDDM configuration generated${TEXT_RST}\n"
+
+printf "${TEXT_CYAN}➡ Applying SDDM configuration...${TEXT_RST}\n"
+
+mkdir -p "$WALLPAPERS_DIR"
+sudo cp "./configs/sddm.conf" "$SDDM_CONF_DIR/00-general.conf"
+sudo cp "./assets/images/sddm-wallpaper.png" "$SDDM_SC_DIR/Backgrounds/sddm-wallpaper.png"
+
+NEW_BG="Backgrounds/sddm-wallpaper.png"
+SDDM_THEME_FILE="$SDDM_SC_DIR/theme.conf"
+
+sudo sed -i "s|^[[:space:]]*Background=.*|Background=\"$NEW_BG\"|" "$SDDM_THEME_FILE"
+sudo sed -i "s|^[[:space:]]*FormPosition=.*|FormPosition=\"right\"|" "$SDDM_THEME_FILE"
+sudo sed -i "s|^[[:space:]]*HaveFormBackground=.*|HaveFormBackground=\"true\"|" "$SDDM_THEME_FILE"
+sudo sed -i "s|^[[:space:]]*AccentColor=.*|AccentColor=\"#171d3e\"|" "$SDDM_THEME_FILE"
+sudo sed -i "s|^[[:space:]]*BackgroundColor=.*|BackgroundColor=\"#000\"|" "$SDDM_THEME_FILE"
+sudo sed -i "s|^[[:space:]]*DateFormat=.*|DateFormat=\"MMMM dd, dddd\"|" "$SDDM_THEME_FILE"
+sudo sed -i "s|^[[:space:]]*HeaderText=.*|HeaderText=\"識トワ様、ようこそ！\"|" "$SDDM_THEME_FILE"
+
+printf "${TEXT_GREEN}✓ SDDM configuration applied${TEXT_RST}\n"

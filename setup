@@ -1,0 +1,11 @@
+#! /usr/bin/env bash
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source ./scripts/env
+sudo -v
+
+source ./scripts/end4_dots
+source ./scripts/hyprland
+source ./scripts/cursor
+source ./scripts/sddm
+source ./scripts/kitty

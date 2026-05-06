@@ -1,0 +1,14 @@
+#! /usr/bin/env bash
+
+mkdir -p ${HOME}/.cache/end4_dots
+cd ${HOME}/.cache/end4_dots
+
+if [ -d .git ]; then
+    git pull
+else
+    git clone https://github.com/end-4/dots-hyprland.git .
+fi
+
+./setup install
+
+cd ${SCRIPT_DIR}
