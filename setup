@@ -1,11 +1,34 @@
 #! /usr/bin/env bash
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ $# -eq 0 ]; then
+        echo "Usage: $0 <install_method>" >&2
+        echo "Available install methods:" >&2
+        echo "  hyprland  - Install Hyprland configuration" >&2
+        echo "  sddm      - Install SDDM theme" >&2
+        echo "  cursor    - Install cursor theme" >&2
+        echo "  kitty     - Install Kitty terminal config" >&2
+        echo "  end4_dots - Install end4 dotfiles" >&2
+        exit 1
+fi
+
+INSTALL_METHOD="$1"
+
 source ./scripts/env
 sudo -v
 
-source ./scripts/end4_dots
-source ./scripts/hyprland
-source ./scripts/cursor
-source ./scripts/sddm
-source ./scripts/kitty
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [ "$INSTALL_METHOD" == "hyprland" ]; then
+        source "$SCRIPT_DIR/scripts/hyprland"
+elif [ "$INSTALL_METHOD" == "sddm" ]; then
+        source "$SCRIPT_DIR/scripts/sddm"
+elif [ "$INSTALL_METHOD" == "cursor" ]; then
+        source "$SCRIPT_DIR/scripts/cursor"
+elif [ "$INSTALL_METHOD" == "kitty" ]; then
+        source "$SCRIPT_DIR/scripts/kitty"
+elif [ "$INSTALL_METHOD" == "end4_dots" ]; then
+        source "$SCRIPT_DIR/scripts/end4_dots"
+else
+        echo "Unknown install method: $INSTALL_METHOD" >&2
+        exit 1
+fi

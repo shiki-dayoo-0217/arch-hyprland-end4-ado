@@ -4,9 +4,9 @@ HYPRCONF_DIR="$HOME/.config/hypr"
 
 printf "${TEXT_CYAN}➡ Applying Hyprland configuration...${TEXT_RST}\n"
 
-cp "../configs/hyprland/monitors.conf" "$HYPRCONF_DIR"
-cp "../configs/hyprland/workspaces.conf" "$HYPRCONF_DIR"
-cp -r "../configs/hyprland/custom" "$HYPRCONF_DIR"
+cp "$SCRIPT_DIR/configs/hyprland/monitors.lua" "$HYPRCONF_DIR"
+cp "$SCRIPT_DIR/configs/hyprland/workspaces.lua" "$HYPRCONF_DIR"
+cp -r "$SCRIPT_DIR/configs/hyprland/custom" "$HYPRCONF_DIR"
 
 hyprctl reload
 
