@@ -8,6 +8,7 @@ cp "$SCRIPT_DIR/configs/hyprland/monitors.lua" "$HYPRCONF_DIR"
 cp "$SCRIPT_DIR/configs/hyprland/workspaces.lua" "$HYPRCONF_DIR"
 cp -r "$SCRIPT_DIR/configs/hyprland/custom" "$HYPRCONF_DIR"
 
+sed -i 's|.*setcursor.*|    hl.exec_cmd("hyprctl setcursor Ado-Cursor 24")|' "$HYPRCONF_DIR/hyprland/execs.lua"
 hyprctl reload
 
 printf "${TEXT_GREEN}✓ Hyprland configuration applied${TEXT_RST}\n"
